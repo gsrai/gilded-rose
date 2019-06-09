@@ -6,7 +6,9 @@
     "precompile": "rimraf app/**/*.js test/**/*.js",
     "compile": "tsc",
     "pretest": "rimraf app/**/*.js test/**/*.js",
-    "test": "nyc mocha"
+    "test": "nyc mocha",
+    "lint": "npx eslint ./test/gilded-rose.spec.ts ./app/*",
+    "lint-fix": "npx eslint ./test/gilded-rose.spec.ts ./app/* --fix"
   },
   "license": "MIT",
   "private": true,
