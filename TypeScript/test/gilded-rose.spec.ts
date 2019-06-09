@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Item, GildedRose, AGED_BRIE, BACKSTAGE_PASSES, SULFURAS } from '../app/gilded-rose';
+import { Item, GildedRose, AGED_BRIE, BACKSTAGE_PASSES, SULFURAS, CONJURED } from '../app/gilded-rose';
 
 describe('Gilded Rose', (): void => {
     it('should construct inventory correctly when there are no items', (): void => {
@@ -72,5 +72,11 @@ describe('Gilded Rose', (): void => {
             expect(items[0].sellIn).to.equal(-9999);
             expect(items[0].quality).to.equal(80);
         });
+    });
+
+    it('should degrade conjured items twice as fast', (): void => {
+        const gildedRose = new GildedRose([new Item(CONJURED, 4, 10)]);
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).to.equal(8);
     });
 });

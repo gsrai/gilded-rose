@@ -13,6 +13,7 @@ export class Item {
 export const AGED_BRIE = 'Aged Brie';
 export const BACKSTAGE_PASSES = 'Backstage passes to a TAFKAL80ETC concert';
 export const SULFURAS = 'Sulfuras, Hand of Ragnaros';
+export const CONJURED = 'Conjured';
 
 const MIN_QUALITY = 0;
 const MAX_QUALITY = 50;
@@ -28,6 +29,8 @@ export class GildedRose {
     updateQuality(): Item[] {
         return this.items.map(item => {
             switch (item.name) {
+                case CONJURED:
+                    return this.updateItem(item, false, 2);
                 case AGED_BRIE:
                     return this.updateItem(item, true);
                 case BACKSTAGE_PASSES:
