@@ -10,6 +10,10 @@ export class Item {
     }
 }
 
+export const AGED_BRIE = 'Aged Brie';
+export const BACKSTAGE_PASSES = 'Backstage passes to a TAFKAL80ETC concert';
+export const SULFURAS = 'Sulfuras, Hand of Ragnaros';
+
 export class GildedRose {
     items: Array<Item>;
 
@@ -19,46 +23,47 @@ export class GildedRose {
 
     updateQuality() {
         for (let i = 0; i < this.items.length; i++) {
-            if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-                if (this.items[i].quality > 0) {
-                    if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                        this.items[i].quality = this.items[i].quality - 1
+            const currentItem = this.items[i];
+            if (currentItem.name !== AGED_BRIE && currentItem.name !== BACKSTAGE_PASSES) {
+                if (currentItem.quality > 0) {
+                    if (currentItem.name !== SULFURAS) {
+                        currentItem.quality = currentItem.quality - 1
                     }
                 }
             } else {
-                if (this.items[i].quality < 50) {
-                    this.items[i].quality = this.items[i].quality + 1
-                    if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-                        if (this.items[i].sellIn < 11) {
-                            if (this.items[i].quality < 50) {
-                                this.items[i].quality = this.items[i].quality + 1
+                if (currentItem.quality < 50) {
+                    currentItem.quality = currentItem.quality + 1
+                    if (currentItem.name === BACKSTAGE_PASSES) {
+                        if (currentItem.sellIn < 11) {
+                            if (currentItem.quality < 50) {
+                                currentItem.quality = currentItem.quality + 1
                             }
                         }
-                        if (this.items[i].sellIn < 6) {
-                            if (this.items[i].quality < 50) {
-                                this.items[i].quality = this.items[i].quality + 1
+                        if (currentItem.sellIn < 6) {
+                            if (currentItem.quality < 50) {
+                                currentItem.quality = currentItem.quality + 1
                             }
                         }
                     }
                 }
             }
-            if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].sellIn = this.items[i].sellIn - 1;
+            if (currentItem.name !== SULFURAS) {
+                currentItem.sellIn = currentItem.sellIn - 1;
             }
-            if (this.items[i].sellIn < 0) {
-                if (this.items[i].name != 'Aged Brie') {
-                    if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-                        if (this.items[i].quality > 0) {
-                            if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                                this.items[i].quality = this.items[i].quality - 1
+            if (currentItem.sellIn < 0) {
+                if (currentItem.name !== AGED_BRIE) {
+                    if (currentItem.name !== BACKSTAGE_PASSES) {
+                        if (currentItem.quality > 0) {
+                            if (currentItem.name !== SULFURAS) {
+                                currentItem.quality = currentItem.quality - 1
                             }
                         }
                     } else {
-                        this.items[i].quality = this.items[i].quality - this.items[i].quality
+                        currentItem.quality = currentItem.quality - currentItem.quality
                     }
                 } else {
-                    if (this.items[i].quality < 50) {
-                        this.items[i].quality = this.items[i].quality + 1
+                    if (currentItem.quality < 50) {
+                        currentItem.quality = currentItem.quality + 1
                     }
                 }
             }

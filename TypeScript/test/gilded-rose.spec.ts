@@ -1,9 +1,7 @@
 import { expect } from 'chai';
-import { Item, GildedRose } from '../app/gilded-rose';
-
-const agedBrie = 'Aged Brie';
-const backstagePass = 'Backstage passes to a TAFKAL80ETC concert'; // TODO should this not be all caps
-const sulfuras = 'Sulfuras, Hand of Ragnaros';
+import {
+    Item, GildedRose, AGED_BRIE, BACKSTAGE_PASSES, SULFURAS
+} from '../app/gilded-rose';
 
 describe('Gilded Rose', function () {
 
@@ -33,13 +31,13 @@ describe('Gilded Rose', function () {
     })
 
     it('should increase quality of Aged Brie at the end of the day', () => {
-        const gildedRose = new GildedRose([ new Item(agedBrie, 0, 5) ]);
+        const gildedRose = new GildedRose([ new Item(AGED_BRIE, 0, 5) ]);
         const items = gildedRose.updateQuality();
         expect(items[0].quality).to.equal(7);
     })
 
     it('should not increase quality beyond 50', () => {
-        const gildedRose = new GildedRose([ new Item(agedBrie, 0, 50) ]);
+        const gildedRose = new GildedRose([ new Item(AGED_BRIE, 0, 50) ]);
         const items = gildedRose.updateQuality();
         expect(items[0].quality).to.equal(50);
     })
@@ -47,15 +45,15 @@ describe('Gilded Rose', function () {
     describe('Quality of Backstage Passes', () => {
 
         it('should increase quality by 1 if concert is not within 10 days', () => {
-            const gildedRose = new GildedRose([ new Item(backstagePass, 11, 5) ]);
+            const gildedRose = new GildedRose([ new Item(BACKSTAGE_PASSES, 11, 5) ]);
             const items = gildedRose.updateQuality();
             expect(items[0].quality).to.equal(6);
         })
 
         it('should increase quality by 2 if concert is within 10 days', () => {
             const gildedRose = new GildedRose([
-                new Item(backstagePass, 9, 5),
-                new Item(backstagePass, 9, 49)
+                new Item(BACKSTAGE_PASSES, 9, 5),
+                new Item(BACKSTAGE_PASSES, 9, 49)
             ]); // TODO: maybe calculate these values
             const items = gildedRose.updateQuality();
             expect(items[0].quality).to.equal(7);
@@ -63,15 +61,15 @@ describe('Gilded Rose', function () {
 
         it('should increase quality by 3 if concert is within 5 days', () => {
             const gildedRose = new GildedRose([
-                new Item(backstagePass, 4, 10),
-                new Item(backstagePass, 4, 49)
+                new Item(BACKSTAGE_PASSES, 4, 10),
+                new Item(BACKSTAGE_PASSES, 4, 49)
             ]);
             const items = gildedRose.updateQuality();
             expect(items[0].quality).to.equal(13);
         })
 
         it('should decrease quality to 0 if concert has passed', () => {
-            const gildedRose = new GildedRose([ new Item(backstagePass, 0, 23) ]);
+            const gildedRose = new GildedRose([ new Item(BACKSTAGE_PASSES, 0, 23) ]);
             const items = gildedRose.updateQuality();
             expect(items[0].quality).to.equal(0);
         })
@@ -80,7 +78,7 @@ describe('Gilded Rose', function () {
     describe('Sulfuras', () => {
 
         it('should not lower quality and sellIn at the end of the day ', () => {
-            const gildedRose = new GildedRose([ new Item(sulfuras, -9999, 80) ]);
+            const gildedRose = new GildedRose([ new Item(SULFURAS, -9999, 80) ]);
             const items = gildedRose.updateQuality();
             expect(items[0].sellIn).to.equal(-9999);
             expect(items[0].quality).to.equal(80);
