@@ -1,12 +1,89 @@
 import { expect } from 'chai';
 import { Item, GildedRose } from '../app/gilded-rose';
 
+const agedBrie = 'Aged Brie';
+const backstagePass = 'Backstage passes to a TAFKAL80ETC concert'; // TODO should this not be all caps
+const sulfuras = 'Sulfuras, Hand of Ragnaros';
+
 describe('Gilded Rose', function () {
 
-    it('should foo', function() {
-        const gildedRose = new GildedRose([ new Item('foo', 0, 0) ]);
-        const items = gildedRose.updateQuality();
-        expect(items[0].name).to.equal('fixme');
+    it('should construct inventory correctly when there are no items', function() {
+        const gildedRose = new GildedRose();
+        expect(gildedRose.items.length).to.equal(0);
     });
 
+    it('should lower quality and sellIn at the end of the day', () => {
+        const gildedRose = new GildedRose([ new Item('bar', 5, 5) ]);
+        const items = gildedRose.updateQuality();
+        expect(items[0].sellIn).to.equal(4);
+        expect(items[0].quality).to.equal(4);
+    })
+
+    it('should lower quality by 2 when sellIn date has passed', () => {
+        const gildedRose = new GildedRose([ new Item('baz', 0, 4) ]);
+        const items = gildedRose.updateQuality();
+        expect(items[0].sellIn).to.equal(-1);
+        expect(items[0].quality).to.equal(2);
+    })
+
+    it('should not lower quality below 0 at the end of the day', () => {
+        const gildedRose = new GildedRose([ new Item('quux', 0, 0) ]);
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).to.equal(0);
+    })
+
+    it('should increase quality of Aged Brie at the end of the day', () => {
+        const gildedRose = new GildedRose([ new Item(agedBrie, 0, 5) ]);
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).to.equal(7);
+    })
+
+    it('should not increase quality beyond 50', () => {
+        const gildedRose = new GildedRose([ new Item(agedBrie, 0, 50) ]);
+        const items = gildedRose.updateQuality();
+        expect(items[0].quality).to.equal(50);
+    })
+
+    describe('Quality of Backstage Passes', () => {
+
+        it('should increase quality by 1 if concert is not within 10 days', () => {
+            const gildedRose = new GildedRose([ new Item(backstagePass, 11, 5) ]);
+            const items = gildedRose.updateQuality();
+            expect(items[0].quality).to.equal(6);
+        })
+
+        it('should increase quality by 2 if concert is within 10 days', () => {
+            const gildedRose = new GildedRose([
+                new Item(backstagePass, 9, 5),
+                new Item(backstagePass, 9, 49)
+            ]); // TODO: maybe calculate these values
+            const items = gildedRose.updateQuality();
+            expect(items[0].quality).to.equal(7);
+        })
+
+        it('should increase quality by 3 if concert is within 5 days', () => {
+            const gildedRose = new GildedRose([
+                new Item(backstagePass, 4, 10),
+                new Item(backstagePass, 4, 49)
+            ]);
+            const items = gildedRose.updateQuality();
+            expect(items[0].quality).to.equal(13);
+        })
+
+        it('should decrease quality to 0 if concert has passed', () => {
+            const gildedRose = new GildedRose([ new Item(backstagePass, 0, 23) ]);
+            const items = gildedRose.updateQuality();
+            expect(items[0].quality).to.equal(0);
+        })
+    })
+
+    describe('Sulfuras', () => {
+
+        it('should not lower quality and sellIn at the end of the day ', () => {
+            const gildedRose = new GildedRose([ new Item(sulfuras, -9999, 80) ]);
+            const items = gildedRose.updateQuality();
+            expect(items[0].sellIn).to.equal(-9999);
+            expect(items[0].quality).to.equal(80);
+        })
+    })
 });
