@@ -8,7 +8,7 @@ describe('Gilded Rose', (): void => {
     });
 
     it('should lower quality and sellIn at the end of the day', (): void => {
-        const gildedRose = new GildedRose([new Item('bar', 5, 5)]);
+        const gildedRose = new GildedRose([new Item('bar', 5, 5)]); // TODO: extract object creation
         const items = gildedRose.updateQuality();
         expect(items[0].sellIn).to.equal(4);
         expect(items[0].quality).to.equal(4);
